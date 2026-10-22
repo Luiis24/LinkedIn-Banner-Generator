@@ -49,7 +49,7 @@ Así que hice lo que mejor sé hacer: **construir una herramienta**. Una página
 ## 📸 Vista de la herramienta
 
 <div align="center">
-<img src="assets/screenshot-es-dark.png" alt="Interfaz de LinkedIn Banner Studio en modo oscuro" width="85%">
+<img width="1920" height="945" alt="image" src="https://github.com/user-attachments/assets/450ab40f-9a0d-4c6c-9f63-288c9708fa20" />
 </div>
 
 ---
