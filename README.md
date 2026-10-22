@@ -13,7 +13,7 @@ Personalízalo en vivo y descárgalo en la medida exacta que usa LinkedIn: **800
 
 <br>
 
-<img src="assets/banner-ejemplo.png" alt="Ejemplo de banner generado con LinkedIn Banner Studio" width="100%">
+<img width="4752" height="1188" alt="linkedin-banner-luis-morales-4752x1188 (1)" src="https://github.com/user-attachments/assets/a188279c-c80a-4a5c-bac8-00ea03a32dd8" />
 
 <sub>Banner de ejemplo exportado directamente desde la herramienta (800 × 200 px).</sub>
 
