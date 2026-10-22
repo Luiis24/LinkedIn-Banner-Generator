@@ -19,6 +19,8 @@ Personalízalo en vivo y descárgalo en la medida exacta que usa LinkedIn: **800
 
 </div>
 
+Enlace del proyecto: https://link3dinbannergenerator.netlify.app/
+
 ---
 
 ## 💡 ¿Por qué existe este proyecto?
