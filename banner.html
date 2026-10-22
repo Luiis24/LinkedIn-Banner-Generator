@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de Banner para LinkedIn - Luis Morales</title>
+  <!-- Google Fonts: Space Grotesk e Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN para la interfaz de control -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- html2canvas para la descarga directa como imagen -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  
+  <style>
+    /* Variables exactas del tema oscuro de LsMorales.dev */
+    :root {
+      --bg: #0b1220;
+      --bg2: #121b2e;
+      --line: #243049;
+      --tx: #eef2f9;
+      --mut: #9aa8c2;
+      --ac: #4cc2ff;
+      --glow: rgba(76, 194, 255, 0.18);
+    }
+
+    /* Estilos base */
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background-color: #060a12;
+      color: var(--tx);
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Lienzo exacto de Banner de LinkedIn (1584px x 396px) */
+    .banner-container {
+      width: 1584px;
+      height: 396px;
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(900px 500px at 85% -10%, var(--glow), transparent),
+        radial-gradient(600px 300px at 15% 110%, rgba(76, 194, 255, 0.08), transparent);
+      box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 32px 50px 32px 420px; /* Margen izquierdo por defecto para dejar libre el avatar */
+      border: 1px solid var(--line);
+      transition: padding-left 0.2s ease;
+    }
+
+    /* Simulación de la foto de perfil redonda de LinkedIn sobre puesta */
+    .avatar-overlay {
+      position: absolute;
+      left: 60px;
+      bottom: -60px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      border: 6px solid #0b1220;
+      background: #1a263e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--mut);
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      z-index: 20;
+      pointer-events: none;
+      opacity: 0.85;
+      border-style: dashed;
+    }
+
+    /* Tipografías y componentes del banner */
+    .font-space {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* Badge "Disponible" */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      background: var(--bg2);
+      border-radius: 99px;
+      padding: 5px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--tx);
+      width: fit-content;
+      margin-bottom: 12px;
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #3ddc97;
+      box-shadow: 0 0 8px #3ddc97;
+    }
+
+    /* Encabezados */
+    .banner-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 46px;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--tx);
+      margin: 0;
+    }
+
+    .banner-subtitle {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 23px;
+      font-weight: 600;
+      color: var(--ac);
+      margin-top: 6px;
+      margin-bottom: 16px;
+    }
+
+    /* Chips de Tecnologías */
+    .tech-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .chip {
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      color: var(--tx);
+      border-radius: 8px;
+      padding: 4px 12px;
+      font-size: 13.5px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+
+    .chip-highlight {
+      border-color: rgba(76, 194, 255, 0.4);
+      color: var(--ac);
+      background: rgba(76, 194, 255, 0.06);
+    }
+
+    /* Footer / Datos de contacto */
+    .banner-footer {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 14px;
+      color: var(--mut);
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+      margin-top: auto;
+    }
+
+    .footer-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+
+    .footer-item strong {
+      color: var(--tx);
+    }
+
+    /* Escalador para la vista previa fluida */
+    .preview-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      display: flex;
+      justify-content: center;
+      padding: 20px 0;
+    }
+
+    .scaled-preview {
+      transform-origin: top center;
+    }
+  </style>
+</head>
+<body class="p-4 md:p-8">
+
+  <!-- Panel de Control Principal -->
+  <div class="max-w-7xl mx-auto space-y-6">
+    
+    <!-- Header de la aplicación -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900/80 p-6 rounded-2xl border border-slate-800 backdrop-blur">
+      <div>
+        <h1 class="text-2xl font-bold text-white flex items-center gap-2">
+          <span>Estudio de Banner para LinkedIn</span>
+          <span class="text-xs px-2 py-1 rounded bg-sky-500/10 text-sky-400 border border-sky-500/20 font-normal">1584 x 396 px</span>
+        </h1>
+        <p class="text-slate-400 text-sm mt-1">
+          Diseño sincronizado con tu portafolio <span class="text-sky-400 font-medium">LsMorales.dev</span>
+        </p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button id="toggleAvatarBtn" class="px-4 py-2 text-sm bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium rounded-xl border border-slate-700 transition">
+          Ocultar Foto de Perfil Guiada
+        </button>
+        <button id="downloadBtn" class="px-5 py-2.5 text-sm bg-sky-500 hover:bg-sky-400 text-slate-950 font-semibold rounded-xl transition shadow-lg shadow-sky-500/20 flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+          Descargar Banner HD (PNG)
+        </button>
+      </div>
+    </div>
+
+    <!-- Contenedor del Lienzo con Auto-escalado -->
+    <div class="bg-slate-950 p-4 md:p-6 rounded-2xl border border-slate-800 shadow-2xl flex flex-col items-center overflow-hidden">
+      <div class="w-full flex justify-between items-center mb-3 text-xs text-slate-400 font-mono px-2">
+        <span>TAMAÑO OFICIAL DE LINKEDIN: 1584 x 396 PX</span>
+        <span id="zoomLabel">Escala: 100%</span>
+      </div>
+
+      <!-- El Banner Real HTML -->
+      <div class="preview-wrapper">
+        <div id="bannerCanvas" class="banner-container rounded-lg shadow-2xl relative">
+          
+          <!-- Simulación del avatar de LinkedIn para alineación -->
+          <div id="avatarOverlay" class="avatar-overlay">
+            <span>Foto LinkedIn</span>
+          </div>
+
+          <!-- Badge verde superior -->
+          <div class="badge">
+            <span class="badge-dot"></span>
+            <span id="badgeText">Disponible · Trabajo remoto</span>
+          </div>
+
+          <!-- Nombre y Título -->
+          <h2 id="nameText" class="banner-title">Luis Morales</h2>
+          <div id="subtitleText" class="banner-subtitle">
+            Desarrollador Frontend &amp; Full Stack
+          </div>
+
+          <!-- Chips de Tecnologías -->
+          <div class="tech-chips" id="chipsContainer">
+            <span class="chip chip-highlight">Angular 17</span>
+            <span class="chip chip-highlight">TypeScript</span>
+            <span class="chip chip-highlight">Java (Spring Boot)</span>
+            <span class="chip chip-highlight">ASP.NET Core</span>
+            <span class="chip">SQL Server</span>
+            <span class="chip">Docker</span>
+            <span class="chip">REST APIs</span>
+            <span class="chip">Tailwind CSS</span>
+          </div>
+
+          <!-- Pie de página con contacto y ubicación -->
+          <div class="banner-footer">
+            <div class="footer-item">
+              🌐 <strong id="webText">LsMorales.dev</strong>
+            </div>
+            <div class="footer-item">
+              💻 <span id="githubText">github.com/Luiis24</span>
+            </div>
+            <div class="footer-item">
+              📍 <span id="locationText">Cali, Colombia</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel de Edición en Tiempo Real -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      
+      <!-- Bloque 1: Textos Principales -->
+      <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 space-y-4">
+        <h3 class="text-sm font-semibold text-slate-300 uppercase tracking-wider">Contenido Principal</h3>
+        
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Nombre</label>
+          <input type="text" id="inputName" value="Luis Morales" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-sky-500">
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Título / Rol</label>
+          <input type="text" id="inputSubtitle" value="Desarrollador Frontend & Full Stack" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-sky-500">
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Estado (Badge)</label>
+          <input type="text" id="inputBadge" value="Disponible · Trabajo remoto" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-sky-500">
+        </div>
+      </div>
+
+      <!-- Bloque 2: Tecnologías / Chips -->
+      <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 space-y-4">
+        <h3 class="text-sm font-semibold text-slate-300 uppercase tracking-wider">Tecnologías (Separadas por coma)</h3>
+        
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Lista de Chips</label>
+          <textarea id="inputChips" rows="4" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-sky-500">Angular 17, TypeScript, Java (Spring Boot), ASP.NET Core, SQL Server, Docker, REST APIs, Tailwind CSS</textarea>
+        </div>
+      </div>
+
+      <!-- Bloque 3: Ajustes de Margen y Contacto -->
+      <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 space-y-4">
+        <h3 class="text-sm font-semibold text-slate-300 uppercase tracking-wider">Ajustes &amp; Contacto</h3>
+        
+        <div>
+          <label class="block text-xs text-slate-400 mb-1 flex justify-between">
+            <span>Desplazamiento Izquierdo (Para evitar foto)</span>
+            <span id="paddingVal" class="text-sky-400 font-mono">420px</span>
+          </label>
+          <input type="range" id="inputPadding" min="280" max="520" value="420" class="w-full accent-sky-500 cursor-pointer">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Web</label>
+            <input type="text" id="inputWeb" value="LsMorales.dev" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-sky-500">
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">GitHub</label>
+            <input type="text" id="inputGithub" value="github.com/Luiis24" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-sky-500">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JavaScript para interactividad y generación de imagen -->
+  <script>
+    // Referencias a elementos del DOM
+    const bannerCanvas = document.getElementById('bannerCanvas');
+    const avatarOverlay = document.getElementById('avatarOverlay');
+    const toggleAvatarBtn = document.getElementById('toggleAvatarBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    // Inputs
+    const inputName = document.getElementById('inputName');
+    const inputSubtitle = document.getElementById('inputSubtitle');
+    const inputBadge = document.getElementById('inputBadge');
+    const inputChips = document.getElementById('inputChips');
+    const inputPadding = document.getElementById('inputPadding');
+    const inputWeb = document.getElementById('inputWeb');
+    const inputGithub = document.getElementById('inputGithub');
+
+    // Outputs
+    const nameText = document.getElementById('nameText');
+    const subtitleText = document.getElementById('subtitleText');
+    const badgeText = document.getElementById('badgeText');
+    const chipsContainer = document.getElementById('chipsContainer');
+    const paddingVal = document.getElementById('paddingVal');
+    const webText = document.getElementById('webText');
+    const githubText = document.getElementById('githubText');
+
+    // Sincronización en tiempo real
+    inputName.addEventListener('input', (e) => nameText.textContent = e.target.value);
+    inputSubtitle.addEventListener('input', (e) => subtitleText.textContent = e.target.value);
+    inputBadge.addEventListener('input', (e) => badgeText.textContent = e.target.value);
+    inputWeb.addEventListener('input', (e) => webText.textContent = e.target.value);
+    inputGithub.addEventListener('input', (e) => githubText.textContent = e.target.value);
+
+    // Ajuste dinámico de margen izquierdo
+    inputPadding.addEventListener('input', (e) => {
+      const val = e.target.value + 'px';
+      bannerCanvas.style.paddingLeft = val;
+      paddingVal.textContent = val;
+    });
+
+    // Renderizado dinámico de Chips
+    function updateChips() {
+      const items = inputChips.value.split(',').map(i => i.trim()).filter(i => i.length > 0);
+      chipsContainer.innerHTML = '';
+      items.forEach((item, index) => {
+        const span = document.createElement('span');
+        span.className = `chip ${index < 4 ? 'chip-highlight' : ''}`;
+        span.textContent = item;
+        chipsContainer.appendChild(span);
+      });
+    }
+
+    inputChips.addEventListener('input', updateChips);
+
+    // Ocultar / Mostrar foto de guía
+    let showAvatar = true;
+    toggleAvatarBtn.addEventListener('click', () => {
+      showAvatar = !showAvatar;
+      avatarOverlay.style.display = showAvatar ? 'flex' : 'none';
+      toggleAvatarBtn.textContent = showAvatar ? 'Ocultar Foto Guiada' : 'Mostrar Foto Guiada';
+    });
+
+    // Descarga directa del banner usando html2canvas
+    downloadBtn.addEventListener('click', () => {
+      // Ocultar temporalmente el círculo guía del avatar si está visible
+      const wasAvatarVisible = avatarOverlay.style.display !== 'none';
+      avatarOverlay.style.display = 'none';
+
+      // Cambiar texto de botón durante el procesamiento
+      downloadBtn.innerHTML = `
+        <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-slate-950" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg> Generando Imagen...`;
+
+      // Captura con alta resolución
+      html2canvas(bannerCanvas, {
+        scale: 2, // 2x para resolución retina ultra-nítida
+        useCORS: true,
+        backgroundColor: '#0b1220'
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'LinkedIn-Banner-Luis-Morales.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+
+        // Restaurar estado
+        if (wasAvatarVisible) avatarOverlay.style.display = 'flex';
+        downloadBtn.innerHTML = `
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+          Descargar Banner HD (PNG)`;
+      });
+    });
+  </script>
+</body>
+</html>
