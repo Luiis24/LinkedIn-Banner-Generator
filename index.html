@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es" data-ui="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estudio de Banner para LinkedIn</title>
+
+  <!-- Fuentes disponibles para el banner (y la interfaz usa Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Oswald:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&family=Poppins:wght@400;500;600;700&family=Roboto+Slab:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="app">
+
+    <!-- ================= Encabezado ================= -->
+    <header class="card topbar">
+      <div>
+        <h1>
+          <span data-i18n="appTitle">Estudio de Banner para LinkedIn</span>
+          <span class="pill">800 × 200 px · 4:1</span>
+        </h1>
+        <p class="muted" data-i18n="appSub"></p>
+      </div>
+      <div class="top-actions">
+        <button id="langBtn" class="btn btn-ghost" type="button" data-i18n-title="langBtnTitle">EN</button>
+        <button id="themeBtn" class="btn btn-ghost" type="button" data-i18n-title="themeBtnTitle"
+          aria-label="Tema">🌙</button>
+      </div>
+    </header>
+
+    <!-- ================= Vista previa ================= -->
+    <section class="card preview-card">
+      <div class="preview-head">
+        <span class="mono muted" data-i18n="previewLabel"></span>
+        <span class="mono muted" id="zoomLabel"></span>
+      </div>
+
+      <div class="preview-host" id="previewHost">
+        <div class="stage" id="stage">
+
+          <!-- LIENZO DEL BANNER (1584 × 396 = 4:1; se exporta a 800 × 200) -->
+          <div id="bannerCanvas" class="banner" data-role="banner">
+            <div class="banner-bg" id="bannerBg"></div>
+            <div class="banner-overlay" id="bannerOverlay"></div>
+
+            <div class="banner-content" id="bannerContent">
+              <div class="banner-main" id="bannerMain">
+                <div class="badge" id="badgeWrap">
+                  <span class="badge-dot"></span>
+                  <span id="badgeText"></span>
+                </div>
+                <h2 id="nameText" class="banner-title"></h2>
+                <div id="subtitleText" class="banner-subtitle"></div>
+                <div class="tech-chips" id="chipsContainer"></div>
+              </div>
+              <div class="banner-footer" id="footerContainer"></div>
+            </div>
+
+            <!-- Foto de perfil (guía): al pasar el mouse permite subir una imagen -->
+            <div id="avatarOverlay" class="avatar" role="button" tabindex="0">
+              <div class="avatar-photo" id="avatarPhoto"></div>
+              <span class="avatar-placeholder" id="avatarPlaceholder" data-i18n="avatarPlaceholder"></span>
+              <div class="avatar-hover">
+                <span class="avatar-action" id="avatarUploadLabel">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                    <circle cx="12" cy="13" r="4" />
+                  </svg>
+                  <span id="avatarUploadText"></span>
+                </span>
+                <button type="button" class="avatar-remove" id="avatarRemove" hidden data-i18n="removePhoto"></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <input type="file" id="avatarFile" accept="image/*" hidden>
+
+      <div class="preview-actions">
+        <div class="left-actions">
+          <button id="toggleAvatarBtn" class="btn btn-ghost" type="button"></button>
+          <label class="check" data-i18n-title="includeAvatarHint">
+            <input type="checkbox" id="chkIncludeAvatar">
+            <span data-i18n="includeAvatar"></span>
+          </label>
+        </div>
+        <div class="right-actions">
+          <label class="inline-field">
+            <span class="muted" data-i18n="exportSize"></span>
+            <select id="selExportSize">
+              <option value="800" data-i18n="size800"></option>
+              <option value="1584" data-i18n="size1584"></option>
+              <option value="2376" data-i18n="size2376"></option>
+              <option value="3168" data-i18n="size3168"></option>
+              <option value="4752" data-i18n="size4752"></option>
+            </select>
+          </label>
+          <button id="downloadBtn" class="btn btn-primary" type="button">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            <span id="downloadLabel" data-i18n="download"></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Paneles de edición ================= -->
+    <div class="grid">
+
+      <!-- Contenido -->
+      <section class="card panel">
+        <h3 data-i18n="secContent"></h3>
+        <label class="field">
+          <span data-i18n="name"></span>
+          <input type="text" id="inputName">
+        </label>
+        <label class="field">
+          <span data-i18n="role"></span>
+          <input type="text" id="inputSubtitle">
+        </label>
+        <label class="field">
+          <span data-i18n="badge"></span>
+          <input type="text" id="inputBadge">
+          <small class="muted" data-i18n="badgeHint"></small>
+        </label>
+      </section>
+
+      <!-- Estilo y posición -->
+      <section class="card panel">
+        <h3 data-i18n="secStyle"></h3>
+
+        <div class="two">
+          <label class="field">
+            <span data-i18n="headingFont"></span>
+            <select id="selHeadingFont"></select>
+          </label>
+          <label class="field">
+            <span data-i18n="bodyFont"></span>
+            <select id="selBodyFont"></select>
+          </label>
+        </div>
+
+        <div class="two">
+          <label class="field">
+            <span data-i18n="accent"></span>
+            <input type="color" id="inputAccent" class="color-wide">
+          </label>
+          <label class="field">
+            <span data-i18n="bannerTheme"></span>
+            <select id="selBannerTheme">
+              <option value="dark" data-i18n="themeDark"></option>
+              <option value="light" data-i18n="themeLight"></option>
+            </select>
+          </label>
+        </div>
+
+        <fieldset class="group">
+          <legend data-i18n="position"></legend>
+          <div class="two">
+            <label class="field">
+              <span data-i18n="hAlign"></span>
+              <select id="selH">
+                <option value="start" data-i18n="hStart"></option>
+                <option value="center" data-i18n="hCenter"></option>
+                <option value="end" data-i18n="hEnd"></option>
+              </select>
+            </label>
+            <label class="field">
+              <span data-i18n="vAlign"></span>
+              <select id="selV">
+                <option value="top" data-i18n="vTop"></option>
+                <option value="center" data-i18n="vCenter"></option>
+                <option value="bottom" data-i18n="vBottom"></option>
+              </select>
+            </label>
+          </div>
+          <label class="field">
+            <span class="between"><span data-i18n="offset"></span><span id="offsetVal"
+                class="mono accent-text"></span></span>
+            <input type="range" id="inputOffset" min="40" max="520" step="1">
+          </label>
+          <div class="rec-row">
+            <span id="recTag" class="rec-tag" data-i18n="isRecommended"></span>
+            <button id="btnRecommended" class="btn btn-ghost btn-small" type="button"
+              data-i18n="restoreRecommended"></button>
+          </div>
+        </fieldset>
+      </section>
+
+      <!-- Fondo -->
+      <section class="card panel">
+        <h3 data-i18n="secBg"></h3>
+
+        <div class="segmented" id="bgModes" role="group">
+          <button type="button" data-mode="default" data-i18n="bgDefault"></button>
+          <button type="button" data-mode="solid" data-i18n="bgSolid"></button>
+          <button type="button" data-mode="image" data-i18n="bgImage"></button>
+        </div>
+
+        <div id="bgSolidBox" hidden>
+          <label class="field">
+            <span data-i18n="bgColor"></span>
+            <input type="color" id="inputBgColor" class="color-wide">
+          </label>
+          <small class="muted" data-i18n="bgColorHint"></small>
+        </div>
+
+        <div id="bgImageBox" hidden>
+          <div class="btn-row">
+            <button type="button" id="btnBgUpload" class="btn btn-ghost"></button>
+            <button type="button" id="btnBgRemove" class="btn btn-ghost" data-i18n="removeBg"></button>
+          </div>
+          <input type="file" id="bgFile" accept="image/*" hidden>
+          <label class="field">
+            <span class="between"><span data-i18n="bgOverlay"></span><span id="overlayVal"
+                class="mono accent-text"></span></span>
+            <input type="range" id="inputOverlay" min="0" max="90" step="1">
+          </label>
+          <small class="muted" data-i18n="bgImageHint"></small>
+        </div>
+      </section>
+
+      <!-- Tecnologías -->
+      <section class="card panel panel-wide">
+        <h3 data-i18n="secTech"></h3>
+        <small class="muted" data-i18n="techHint"></small>
+        <div class="list" id="chipList"></div>
+        <div class="add-row">
+          <input type="text" id="inputNewChip" data-i18n-placeholder="techPlaceholder">
+          <button type="button" id="btnAddChip" class="btn btn-primary" data-i18n="add"></button>
+        </div>
+      </section>
+
+      <!-- Ajustes y contacto -->
+      <section class="card panel">
+        <h3 data-i18n="secContact"></h3>
+        <small class="muted" data-i18n="contactHint"></small>
+        <div class="list" id="contactList"></div>
+        <div class="add-row">
+          <select id="selNewContact">
+            <option value="phone" data-i18n="typePhone"></option>
+            <option value="email" data-i18n="typeEmail"></option>
+            <option value="linkedin" data-i18n="typeLinkedin"></option>
+            <option value="web" data-i18n="typeWeb"></option>
+            <option value="github" data-i18n="typeGithub"></option>
+            <option value="location" data-i18n="typeLocation"></option>
+            <option value="custom" data-i18n="typeCustom"></option>
+          </select>
+          <button type="button" id="btnAddContact" class="btn btn-primary" data-i18n="addField"></button>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- html2canvas: genera la imagen descargable -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="i18n.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
