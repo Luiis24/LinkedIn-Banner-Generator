@@ -1,7 +1,8 @@
 /* ============================================================
    Estudio de Banner para LinkedIn
    - Lienzo de diseño: 1584 × 396 px (4:1)
-   - Exportación: varias resoluciones con relación 4:1
+   - Exportación: 800 × 200 px (medida intrínseca de LinkedIn)
+     o 1584 × 396 px (alta resolución)
    ============================================================ */
 (() => {
   'use strict';
@@ -407,8 +408,27 @@
     $('#themeBtn').textContent = state.uiTheme === 'dark' ? '☀️' : '🌙';
   }
 
+  /* ---------- Limpiar toda la información ---------- */
+  function clearAll() {
+    if (!window.confirm(t('clearConfirm'))) return;
+    Object.assign(state, {
+      name: '', subtitle: '', badge: '',
+      chips: [], contacts: [],
+      avatar: null, bgImage: null
+    });
+    if (state.bgMode === 'image') state.bgMode = 'default';
+    syncInputs();
+    renderLists();
+    updateAvatarUi();
+    updateBgUi();
+    renderBanner();
+    $('#inputName').focus();
+  }
+
   /* ---------- Eventos ---------- */
   function bindEvents() {
+    $('#clearBtn').addEventListener('click', clearAll);
+
     // Idioma y tema de la interfaz
     $('#langBtn').addEventListener('click', () => setLang(state.lang === 'es' ? 'en' : 'es'));
     $('#themeBtn').addEventListener('click', () => {
@@ -524,7 +544,7 @@
     window.addEventListener('resize', fit);
   }
 
-  /* ---------- Exportación a PNG (resoluciones con relación 4:1) ---------- */
+  /* ---------- Exportación a PNG (800 × 200 o 1584 × 396) ---------- */
   function resizeStep(src, w, h2) {
     const c = document.createElement('canvas');
     c.width = w; c.height = h2;
@@ -575,10 +595,8 @@
       else av.remove();
       document.body.appendChild(clone);
 
-      const outW = Number(state.exportSize);
-      const outH = outW / 4;
       const canvas = await html2canvas(clone, {
-        scale: Math.max(2, outW / W),
+        scale: 2,
         width: W,
         height: H,
         scrollX: 0,
@@ -588,6 +606,8 @@
         backgroundColor: THEMES[state.bannerTheme].bg
       });
 
+      const outW = Number(state.exportSize);
+      const outH = outW / 4; // 800 × 200 ó 1584 × 396 (relación 4:1)
       const out = resizeExact(canvas, outW, outH);
 
       const blob = await new Promise(res => out.toBlob(res, 'image/png'));

@@ -18,11 +18,8 @@ window.I18N = {
     includeAvatar: 'Incluir la foto en la imagen exportada',
     includeAvatarHint: 'LinkedIn coloca tu foto real encima del banner, por eso normalmente no se incluye.',
     exportSize: 'Tamaño de exportación',
-    size800: '800 × 200 px',
-    size1584: '1584 × 396 px',
-    size2376: '2376 × 594 px',
-    size3168: '3168 × 792 px',
-    size4752: '4752 × 1188 px',
+    size800: '800 × 200 px · medida de LinkedIn',
+    size1584: '1584 × 396 px · alta resolución',
     download: 'Descargar banner (PNG)',
     generating: 'Generando imagen…',
     exportError: 'No se pudo generar la imagen. Revisa tu conexión (se usan fuentes y librerías en línea) e inténtalo de nuevo.',
@@ -92,6 +89,13 @@ window.I18N = {
     contactEmpty: 'Sin campos de contacto.',
     iconTitle: 'Icono',
 
+    clearAll: 'Limpiar todo',
+    clearAllTitle: 'Borra tu información (nombre, textos, tecnologías, contacto y fotos) para empezar desde cero',
+    clearConfirm: '¿Limpiar toda la información? Se borrarán los textos, tecnologías, datos de contacto y las imágenes subidas. Los estilos (fuentes, colores y posición) se conservan.',
+    namePlaceholder: 'Tu nombre',
+    rolePlaceholder: 'Tu rol o título profesional',
+    badgePlaceholder: 'Ej. Disponible · Trabajo remoto',
+
     drag: 'Arrastrar para ordenar',
     moveUp: 'Subir',
     moveDown: 'Bajar',
@@ -112,11 +116,8 @@ window.I18N = {
     includeAvatar: 'Include the photo in the exported image',
     includeAvatarHint: 'LinkedIn places your real photo on top of the banner, so it is usually left out.',
     exportSize: 'Export size',
-    size800: '800 × 200 px',
-    size1584: '1584 × 396 px',
-    size2376: '2376 × 594 px',
-    size3168: '3168 × 792 px',
-    size4752: '4752 × 1188 px',
+    size800: '800 × 200 px · LinkedIn size',
+    size1584: '1584 × 396 px · high resolution',
     download: 'Download banner (PNG)',
     generating: 'Generating image…',
     exportError: 'The image could not be generated. Check your connection (online fonts and libraries are used) and try again.',
@@ -186,6 +187,13 @@ window.I18N = {
     contactEmpty: 'No contact fields.',
     iconTitle: 'Icon',
 
+    clearAll: 'Clear all',
+    clearAllTitle: 'Erase your information (name, texts, technologies, contact and photos) to start from scratch',
+    clearConfirm: 'Clear all information? Texts, technologies, contact details and uploaded images will be erased. Styles (fonts, colors and position) are kept.',
+    namePlaceholder: 'Your name',
+    rolePlaceholder: 'Your role or job title',
+    badgePlaceholder: 'E.g. Available · Remote work',
+
     drag: 'Drag to reorder',
     moveUp: 'Move up',
     moveDown: 'Move down',
@@ -196,5 +204,5 @@ window.I18N = {
 /* Textos del banner que cambian de idioma mientras no se hayan editado */
 window.DEFAULT_TEXT = {
   es: { badge: 'Disponible · Trabajo remoto', subtitle: 'Desarrollador Frontend & Full Stack' },
-  en: { badge: 'Available · Remote work', subtitle: 'Frontend & Full Stack Developer' }
+  en: { badge: 'Available · Remote work',      subtitle: 'Frontend & Full Stack Developer' }
 };
