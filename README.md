@@ -13,11 +13,13 @@ Personalízalo en vivo y descárgalo en la medida exacta que usa LinkedIn: **800
 
 <br>
 
-<img src="assets/banner-ejemplo.png" alt="Ejemplo de banner generado con LinkedIn Banner Studio" width="100%">
+<img width="4752" height="1188" alt="linkedin-banner-luis-morales-4752x1188 (1)" src="https://github.com/user-attachments/assets/a188279c-c80a-4a5c-bac8-00ea03a32dd8" />
 
 <sub>Banner de ejemplo exportado directamente desde la herramienta (800 × 200 px).</sub>
 
 </div>
+
+Enlace del proyecto: https://link3dinbannergenerator.netlify.app/
 
 ---
 
@@ -49,7 +51,7 @@ Así que hice lo que mejor sé hacer: **construir una herramienta**. Una página
 ## 📸 Vista de la herramienta
 
 <div align="center">
-<img src="assets/screenshot-es-dark.png" alt="Interfaz de LinkedIn Banner Studio en modo oscuro" width="85%">
+<img width="1920" height="945" alt="image" src="https://github.com/user-attachments/assets/450ab40f-9a0d-4c6c-9f63-288c9708fa20" />
 </div>
 
 ---
